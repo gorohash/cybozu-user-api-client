@@ -9,7 +9,13 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "run-p --print-label lint:*",
+    "lint:eslint": "eslint . --ext .ts",
+    "lint:prettier": "prettier . --check",
+    "fix": "run-s --print-label fix:eslint fix:prettier",
+    "fix:eslint": "npm run lint:eslint -- --fix",
+    "fix:prettier": "npm run lint:prettier -- --write"
   },
   "repository": {
     "type": "git",
