@@ -1,5 +1,7 @@
 import queryString from "query-string";
 
+import { CybozuUserAPIError, ErrorResponse } from "./CybozuUserAPIError.js";
+
 type ParamsPrimitiveValue = string | number | undefined;
 type Params = Record<
   string,
@@ -31,13 +33,16 @@ export class HttpClient {
         ).toString("base64"),
       },
     });
-    const result = await response.json();
+    return HttpClient.handleResponse(response);
+  }
+
+  private static async handleResponse<T>(response: Response) {
+    const data = await response.json();
 
     if (response.ok) {
-      return result as T;
+      return data as T;
     }
 
-    // TODO: Implement error object
-    throw new Error();
+    throw new CybozuUserAPIError(data as ErrorResponse);
   }
 }
